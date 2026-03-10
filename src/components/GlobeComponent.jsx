@@ -20,29 +20,33 @@ export default function GlobeComponent({
     let animFrame = null;
 
     const initGlobe = async () => {
-      const GlobeGL = (await import('globe.gl')).default;
+      try {
+        const GlobeGL = (await import('globe.gl')).default;
 
-      const width = size || mountRef.current.offsetWidth || window.innerWidth;
-      const height = size || mountRef.current.offsetHeight || window.innerHeight;
+        const width = size || mountRef.current?.offsetWidth || window.innerWidth;
+        const height = size || mountRef.current?.offsetHeight || window.innerHeight;
 
-      globe = GlobeGL()(mountRef.current);
+        globe = GlobeGL()(mountRef.current);
 
-      const mapboxToken = import.meta.env.VITE_MAPBOX_TOKEN;
-      const globeTexture = mapboxToken
-        ? `https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v12/static/0,20,1/1024x512?access_token=${mapboxToken}`
-        : 'https://unpkg.com/three-globe/example/img/earth-night.jpg';
+        // Must be equirectangular projection — Mapbox static is NOT, use earth-night
+        const globeTexture = 'https://unpkg.com/three-globe/example/img/earth-night.jpg';
 
-      globe
-        .width(width)
-        .height(height)
-        .backgroundColor('rgba(0,0,0,0)')
-        .showGlobe(true)
-        .showAtmosphere(true)
-        .atmosphereColor('#00f5ff')
-        .atmosphereAltitude(0.12)
-        .globeImageUrl(globeTexture);
+        globe
+          .width(width)
+          .height(height)
+          .backgroundColor('rgba(0,0,0,0)')
+          .showGlobe(true)
+          .showAtmosphere(true)
+          .atmosphereColor('#00f5ff')
+          .atmosphereAltitude(0.12)
+          .globeImageUrl(globeTexture);
 
-      globe.onGlobeReady(() => setIsLoaded(true));
+        // Fallback: mark loaded after 8s even if texture fails
+        const fallbackTimer = setTimeout(() => setIsLoaded(true), 8000);
+        globe.onGlobeReady(() => {
+          clearTimeout(fallbackTimer);
+          setIsLoaded(true);
+        });
 
       // Points data
       const buildPoints = (agentList) =>
@@ -102,6 +106,10 @@ export default function GlobeComponent({
       return () => {
         window.removeEventListener('resize', handleResize);
       };
+      } catch (err) {
+        console.error('Globe init failed:', err);
+        setIsLoaded(true); // show app even if globe crashes
+      }
     };
 
     initGlobe();
