@@ -27,6 +27,11 @@ export default function GlobeComponent({
 
       globe = GlobeGL()(mountRef.current);
 
+      const mapboxToken = import.meta.env.VITE_MAPBOX_TOKEN;
+      const globeTexture = mapboxToken
+        ? `https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v12/static/0,20,1/1024x512?access_token=${mapboxToken}`
+        : 'https://unpkg.com/three-globe/example/img/earth-night.jpg';
+
       globe
         .width(width)
         .height(height)
@@ -35,32 +40,9 @@ export default function GlobeComponent({
         .showAtmosphere(true)
         .atmosphereColor('#00f5ff')
         .atmosphereAltitude(0.12)
-        // Globe texture — dark ocean
-        .globeImageUrl(null)
-        .globeMaterial(
-          (() => {
-            const THREE = window.THREE || null;
-            return undefined; // Let globe.gl use default, we'll style via atmosphere
-          })()
-        );
+        .globeImageUrl(globeTexture);
 
-      // Style the globe surface
-      globe.onGlobeReady(() => {
-        const scene = globe.scene();
-        if (scene) {
-          // Dark teal globe
-          scene.traverse((obj) => {
-            if (obj.isMesh && obj.geometry?.type === 'SphereGeometry') {
-              if (obj.material) {
-                obj.material.color?.setStyle('#0a0f2e');
-                obj.material.emissive?.setStyle('#050510');
-              }
-            }
-          });
-        }
-
-        setIsLoaded(true);
-      });
+      globe.onGlobeReady(() => setIsLoaded(true));
 
       // Points data
       const buildPoints = (agentList) =>
