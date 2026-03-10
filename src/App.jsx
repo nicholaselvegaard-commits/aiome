@@ -6,6 +6,7 @@ import Landing from './pages/Landing';
 import Onboarding from './pages/Onboarding';
 import World from './pages/World';
 import Profile from './pages/Profile';
+import Dashboard from './pages/Dashboard';
 import { supabase } from './supabase';
 
 function ProtectedRoute({ user, children }) {
@@ -89,6 +90,7 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
