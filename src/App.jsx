@@ -7,6 +7,7 @@ import Onboarding from './pages/Onboarding';
 import World from './pages/World';
 import Profile from './pages/Profile';
 import Dashboard from './pages/Dashboard';
+import AgentHouse from './pages/AgentHouse';
 import { supabase } from './supabase';
 
 function ProtectedRoute({ user, children }) {
@@ -91,6 +92,7 @@ export default function App() {
           }
         />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/agents" element={<AgentHouse />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
