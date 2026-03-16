@@ -11,7 +11,7 @@ import { supabase } from '../supabase';
 // ─── Agent definitions ────────────────────────────────────────────────────────
 
 const AGENTS = [
-  { id: 'jordan',    emoji: '🐺', name: 'Jordan',    role: 'CEO / Orchestrator',    color: '#00f5ff', desc: 'Din co-founder. Orkestrerer alt, tar beslutninger.' },
+  { id: 'jarvis',    emoji: '🐺', name: 'Jarvis',    role: 'CEO / Orchestrator',    color: '#00f5ff', desc: 'Din co-founder. Orkestrerer alt, tar beslutninger.' },
   { id: 'curios',    emoji: '🔍', name: 'Curios',    role: 'CTO',                   color: '#a855f7', desc: 'Overvåker alle agenter og rapporterer status.' },
   { id: 'sales',     emoji: '💰', name: 'Sales',     role: 'Cold Outreach',         color: '#22c55e', desc: 'Finner leads og sender pitch-eposter autonomt.' },
   { id: 'research',  emoji: '📚', name: 'Research',  role: 'Intelligence',          color: '#3b82f6', desc: 'Deep web research → strukturerte rapporter.' },
